@@ -1,0 +1,11 @@
+groq
+python-dotenv
+mcp
+pydantic
+langchain
+langchain-community
+faiss-cpu
+sentence-transformers
+requests
+a2a-sdk[all]
+uvicorn
