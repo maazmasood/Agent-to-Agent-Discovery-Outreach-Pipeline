@@ -111,7 +111,7 @@ class NavigatorAgentExecutor(AgentExecutor):
                     confirmations.append(MailConfirmation(
                         sent_to=dev_email if dev_email else contact_email,
                         subject=mail.get("subject", ""),
-                        body_preview=body[:100] + "...",
+                        body_preview=body[:500] + "...",
                         status="Sent Successfully" if success else "Failed"
                     ))
                 
@@ -122,6 +122,7 @@ class NavigatorAgentExecutor(AgentExecutor):
             # Case 2: Draft (Default flow from pipeline)
             professionals_data = input_data.get("scout_data", text_input)
             dev_email = input_data.get("dev_email")
+            topic = input_data.get("topic")
                 
         except Exception as e:
             print(f"Exception parsing input: {e}")
@@ -134,18 +135,32 @@ class NavigatorAgentExecutor(AgentExecutor):
         
         system_prompt = f"""
         You are the Mail Sending Agent (Agent B).
-        You generate personalized emails for the list of professionals provided.
+        You are a highly skilled professional outreach specialist. Your task is to generate 
+        top-notch, premium, and personalized inquiry emails for the provided professionals.
         
         Professionals Data:
         {professionals_data}
         
+        Topic for Inquiry:
+        {topic if topic else "General inquiry about services"}
+        
         Tasks:
-        1. For EACH professional in the list, compose a short, professional inquiry email.
-        2. Set 'subject' to something relevant like "Inquiry for [Profession] services".
-        3. Include the original 'contact_email', 'name', and 'profession' in each draft object.
-        4. Produce a BulkMailConfirmation JSON object.
-        5. CRITICAL: For each confirmation, set 'status' to 'DRAFT - Pending Confirmation'.
-        6. Include a 'body' field in each confirmation object containing the full email text.
+        1. For EACH professional in the list, compose a sophisticated and professional inquiry email.
+        2. Set 'subject' to a compelling and clear line (e.g., "Inquiry regarding [Topic] - [Professional Name]").
+        3. The email body must follow this structure:
+           - Professional Salutation (e.g., "Dear Dr. [Name]" or "Dear [Company Name] Team")
+           - Personalized Hook: Acknowledge their reputation or specific expertise in [Profession].
+           - Introduction: Briefly state your interest in their specialized services.
+           - Specific Inquiry: Clearly and politely ask about the specified Topic (e.g., "{topic if topic else 'general health services'}").
+           - Value Statement: Mention you are looking for high-quality care or service.
+           - Tone: Maintain a polite, respectful, and sophisticated professional tone.
+           - Call to Action: Request a brief response, a quote, or availability for a consultation.
+           - Professional Sign-off: Use "Best regards" or "Sincerely" followed by "Interested Client".
+        
+        4. Include the original 'contact_email', 'name', and 'profession' in each draft object.
+        5. Produce a BulkMailConfirmation JSON object.
+        6. CRITICAL: For each confirmation, set 'status' to 'DRAFT - Pending Confirmation'.
+        7. Include a 'body' field in each confirmation object containing the full, premium email text.
         
         You must output valid JSON strictly matching this exact schema:
         {json.dumps(schema, indent=2)}

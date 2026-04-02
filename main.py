@@ -1,8 +1,18 @@
 import sys
 import json
 import asyncio
+import os
 from uuid import uuid4
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Set up header bar for rich aesthetics
+def print_header(title):
+    print("\n" + "="*70)
+    print(f" {title.center(68)}")
+    print("="*70)
 
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import MessageSendParams, SendMessageRequest
@@ -86,13 +96,14 @@ async def async_main():
         print("[*] Contacting Mail Agent Server on port 8003...")
         
         # User requested devmode with a specific temp email
-        dev_email = env.get("DEV_EMAIL") 
+        dev_email = os.environ.get("DEV_EMAIL") 
         print(f"[*] DEVMODE ACTIVE: All emails will be redirected to {dev_email}")
 
         # Step 1: Draft the emails
         draft_payload = json.dumps({
             "scout_data": scout_data_str,
-            "dev_email": dev_email
+            "dev_email": dev_email,
+            "topic": plan.inquiry_details
         })
         bulk_draft_raw = await a2a_invoke(8003, draft_payload)
         
@@ -106,8 +117,10 @@ async def async_main():
             print("                        DRAFT EMAILS PREVIEW")
             print("="*70)
             for idx, conf in enumerate(confirmations):
-                print(f"[{idx+1}] To: {conf.get('sent_to')} | Subject: {conf.get('subject')}")
-                print(f"    Preview: {conf.get('body_preview')}")
+                print(f"\n[{idx+1}] To: {conf.get('sent_to')}")
+                print(f"    Subject: {conf.get('subject')}")
+                print(f"    Content Preview:")
+                print(f"    \"\"\"{conf.get('body_preview')}\"\"\"")
             print("-" * 70)
             
             # Step 2: Confirmation

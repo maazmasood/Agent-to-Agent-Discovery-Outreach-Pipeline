@@ -9,12 +9,14 @@ class ExecutionPlan(BaseModel):
     )
     extracted_location: Optional[str] = Field(None, description="Location extracted from the query, if any.")
     extracted_specialty: Optional[str] = Field(None, description="Profession/Specialty requested, if any.")
+    inquiry_details: Optional[str] = Field(None, description="Specific inquiry details or topic extracted from the query.")
 
 class ProfessionalCandidate(BaseModel):
     name: str = Field(..., description="Name of the professional or company")
     location: str = Field(..., description="City or address of the professional")
     rating: float = Field(..., description="Star rating representing quality")
     profession: str = Field(..., description="Profession like 'Doctor', 'Engineer', 'Plumber'")
+    website: Optional[str] = Field(None, description="Official website of the professional")
     contact_email: Optional[str] = Field(None, description="Contact email of the professional")
 
 class SearchOutput(BaseModel):

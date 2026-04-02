@@ -4,9 +4,11 @@ This project implements an automated pipeline for discovering professionals (via
 
 ## Architecture
 
-1.  **Director Agent**: Analyzes the user's query and routes it to the appropriate agents (Search and/or Mail).
-2.  **Search Agent (Port 8001)**: Interacts with the Google Maps MCP server to find professionals based on specialty and location.
-3.  **Mail Agent (Port 8003)**: Synthesizes personalized email drafts for the discovered professionals and handles the actual dispatch via SMTP.
+1.  **Director Agent**: Analyzes the user's natural language query using the Director LLM to route to the appropriate agents and extract specific location, specialty, and inquiry details.
+
+2.  **Search Agent (Port 8001)**: Directly search the **Google Maps website** using Playwright. It automatically visits professional websites and extracts contact emails for inquiry outreach.
+
+3.  **Mail Agent (Port 8003)**: A specialized LLM-powered agent that synthesizes high-quality, professional inquiry drafts based on the user's specific topic and handles the dispatch via Gmail SMTP.
 
 ## Getting Started
 
@@ -23,6 +25,7 @@ DEV_EMAIL=your_test_email@gmail.com
 ### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
+playwright install chromium
 ```
 
 ### 3. Run the Agents
@@ -38,16 +41,14 @@ python src/mail_agent/server.py
 ### 4. Run the Pipeline
 Execute the main script with your query:
 ```powershell
-python main.py "find me plumbers in newyork and send them an inquiry email"
+python main.py "find me dentists in New York and inquire about checkup costs"
 ```
 
 ## Developer Notes
 
-### Google Maps Integration
+### Web-Based Professional Discovery
 > [!IMPORTANT]
-> This project has been primarily tested using the **Google Maps Mock API** fallback logic. 
-> 
-> If you are using a real API key, please ensure the **Places API** is enabled and billing is active in your Google Cloud Console. If you encounter any issues with the realtime MCP connection while using a real key, please **create an issue** in the repository.
+> This project now uses **Playwright** to search the Google Maps website directly. This means it can discover contact email addresses that are not available through the official Google Maps API.
 
 ### Known Limitations/Gotchas
 - **Import Path**: If running servers directly as scripts, the project root is automatically added to `sys.path` to resolve the `src` package.

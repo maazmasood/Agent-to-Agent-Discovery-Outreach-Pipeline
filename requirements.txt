@@ -9,3 +9,4 @@ sentence-transformers
 requests
 a2a-sdk[all]
 uvicorn
+playwright

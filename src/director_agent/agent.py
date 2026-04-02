@@ -26,6 +26,7 @@ def invoke_director(user_query: str) -> ExecutionPlan:
     
     Extraction Rules:
     - Always extract the 'extracted_location' and 'extracted_specialty' (which is the profession requested).
+    - Extract the 'inquiry_details' (the specific topic or question the user wants to ask, e.g., 'annual checkup charges' or 'emergency availability').
     
     You must output valid JSON strictly matching this exact schema:
     {json.dumps(schema, indent=2)}
