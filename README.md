@@ -1,6 +1,15 @@
 # A2A: Agent-to-Agent Professional Discovery & Outreach Pipeline
 
+
+
 This project implements an automated pipeline for discovering professionals (via Google Maps) and drafting/sending personalized inquiry emails. It uses a multi-agent architecture where agents communicate over HTTP/JSON-RPC.
+
+
+<video width="640" height="360" controls>
+  <source src="demo/demo_video.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
 
 ## Architecture
 
